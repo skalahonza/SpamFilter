@@ -15,7 +15,6 @@ class BinaryConfusionMatrix:
             return False
         return True
 
-
     def update(self, truth, prediction):
         if self.wrong_tag(truth) or self.wrong_tag(prediction):
             raise ValueError
@@ -33,6 +32,7 @@ class BinaryConfusionMatrix:
             elif prediction == self.neg_tag and truth == self.pos_tag:
                 self.FN += 1
 
+    # TODO secure the case, when te cictionaries are different
     def compute_from_dicts(self, truth_dict, prediction_dict):
         for key, value in truth_dict.items():
             predicted = prediction_dict[key]
