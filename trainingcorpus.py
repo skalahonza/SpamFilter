@@ -1,7 +1,7 @@
 import os
 
-from Ukoly.SpamFilter.corpus import Corpus
-from Ukoly.SpamFilter.utils import read_classification_from_file
+from corpus import Corpus
+from utils import read_classification_from_file
 
 
 class TrainingCorpus(Corpus):
