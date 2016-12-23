@@ -29,17 +29,38 @@ def compute_word_frequencies_from_file(file):
 
 def compute_word_frequencies_from_text(text):
     text = text.translate(str.maketrans('.', ' '))
+    text = text.translate(str.maketrans(',', ' '))
     text = text.lower()
-    dictionary = {}
-    for word in text.split():
-        if word in dictionary:
-            count = dictionary[word]
-        dictionary[word] = count + 1
-    return dictionary
+    from collections import Counter
+    return Counter(text.split())
 
 
 def extract_sentences_from(text):
     return text.split('.')
+
+
+def make_coefficient(number):
+    if number > 1:
+        return 1 / number
+    else:
+        return number
+
+
+def compare_dicts(first, second):
+    """Compares two dictionaries and returns sameness"""
+    sameness = 0
+    items = max(first, second)
+    for key, value in first.items():
+        if key in second:
+            equality = first[key] / second[key]
+            sameness += equality / items
+    return sameness
+
+
+def extract_email_address(text):
+    import re
+    match = re.search(r'[\w\.-]+@[\w\.-]+', text)
+    return match.group(0)
 
 
 if __name__ == "__main__":
