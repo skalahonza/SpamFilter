@@ -9,7 +9,7 @@ SUBJECT_PRIORITY = 0.1
 FROM_PRIORITY = 0.1
 RECEIVED_PRIORITY = 0.1
 WARNING_PRIORITY = 0.1
-PRECEDENCE_PRIORITY = 0.1
+SECONDARY_PRIORITY = 0.1
 PAYLOAD_PRIORITY = 0.1
 
 
@@ -31,11 +31,10 @@ class Email:
         self.file_id = file_id
         self.text = string
         msg = email.message_from_string(string)
+        self.AllHeaders = msg._headers
         # properties that are not defined will be None
         self.subject = msg['Subject']
         self.From = msg['From']
-        self.content_type = msg['Content-Type']
-        self.precedence = msg['Precedence']
         # can contain valuable information - for example - suspicious domain differences
         self.x_authentication_warning = msg['X-Authentication-Warning']
         # serialize received history
@@ -58,6 +57,7 @@ class Email:
         :type second: Email
         """
         match = 0
+        ignored = ['Subject', 'From', 'X-Authentication-Warning', 'Received']
         # Compare subject
         if first.subject == second.subject:
             match += SUBJECT_PRIORITY
@@ -70,10 +70,6 @@ class Email:
         if extract_email_address(first.From) == extract_email_address(second.From):
             match += FROM_PRIORITY
 
-        # compare precedence
-        if first.precedence == second.precedence:
-            match += PRECEDENCE_PRIORITY
-
         # compare X authentication warning
         if first.x_authentication_warning == second.x_authentication_warning:
             match += WARNING_PRIORITY
@@ -83,5 +79,14 @@ class Email:
         receive_match = set(first.received).intersection(second.received)
         match += (len(receive_match) / length) * RECEIVED_PRIORITY
 
+        MatchedHeaders = 0
+        # compare secondary headers
+        for header in first.AllHeaders:
+            if header[0] not in ignored:
+                if header in second.AllHeaders:
+                    MatchedHeaders += 1
+
+        match += SECONDARY_PRIORITY * MatchedHeaders / max(len(first.AllHeaders), len(second.AllHeaders))
         # compare payloads
+
         return match
