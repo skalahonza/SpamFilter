@@ -48,6 +48,13 @@ def compare_payloads(first, second):
     return 0
 
 
+def not_empty(first, second):
+    if first is None or second is None:
+        return False
+    else:
+        return True
+
+
 if __name__ == "__main__":
     path = "data\\1\\!truth.txt"
     print(read_classification_from_file(path))

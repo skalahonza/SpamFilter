@@ -3,6 +3,7 @@ import email.parser
 from utils import compute_word_frequencies_from_text
 from utils import compare_dicts
 from utils import compare_payloads
+from utils import not_empty
 
 # Coefficients for comparing
 SUBJECT_PRIORITY = 0.1
@@ -62,7 +63,7 @@ class Email:
         # Compare subject
         if first.subject == second.subject:
             match += SUBJECT_PRIORITY
-        else:
+        elif not_empty(first.subject, second.subject):
             match += compare_dicts(compute_word_frequencies_from_text(first.subject),
                                    compute_word_frequencies_from_text(second.subject)) * SUBJECT_PRIORITY / 2
             # they are not equal, only some words occurrences
