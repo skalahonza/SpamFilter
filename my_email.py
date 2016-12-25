@@ -3,6 +3,7 @@ import email.parser
 from utils import compute_word_frequencies_from_text
 from utils import compare_dicts
 from utils import extract_email_address
+from utils import compare_payloads
 
 # Coefficients for comparing
 SUBJECT_PRIORITY = 0.1
@@ -50,7 +51,8 @@ class Email:
             self.payloads.append(msg.get_payload())
         pass
 
-    def compare_emails(self, first, second):
+    @staticmethod
+    def compare_emails(first, second):
         """
         Compares two emails and returns match as a decimal value or 1 if they are same
         :type first: Email
@@ -88,5 +90,5 @@ class Email:
 
         match += SECONDARY_PRIORITY * MatchedHeaders / max(len(first.AllHeaders), len(second.AllHeaders))
         # compare payloads
-
+        match += PAYLOAD_PRIORITY * compare_payloads(first.payloads, second.payloads)
         return match
