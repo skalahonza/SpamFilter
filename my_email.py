@@ -2,7 +2,6 @@ import email.parser
 
 from utils import compute_word_frequencies_from_text
 from utils import compare_dicts
-from utils import extract_email_address
 from utils import compare_payloads
 
 # Coefficients for comparing
@@ -69,7 +68,7 @@ class Email:
             # they are not equal, only some words occurrences
 
         # Compare from
-        if extract_email_address(first.From) == extract_email_address(second.From):
+        if first.From == second.From:
             match += FROM_PRIORITY
 
         # compare X authentication warning
@@ -79,7 +78,8 @@ class Email:
         # compare receive history chain
         length = max(len(first.received), len(second.received))
         receive_match = set(first.received).intersection(second.received)
-        match += (len(receive_match) / length) * RECEIVED_PRIORITY
+        if length > 0:
+            match += (len(receive_match) / length) * RECEIVED_PRIORITY
 
         MatchedHeaders = 0
         # compare secondary headers

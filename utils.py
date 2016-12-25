@@ -36,18 +36,12 @@ def make_coefficient(number):
 def compare_dicts(first, second):
     """Compares two dictionaries and returns sameness"""
     sameness = 0
-    items = max(first, second)
+    items = max(len(first), len(second))
     for key, value in first.items():
         if key in second:
             equality = first[key] / second[key]
             sameness += equality / items
     return sameness
-
-
-def extract_email_address(text):
-    import re
-    match = re.search(r'[\w\.-]+@[\w\.-]+', text)
-    return match.group(0)
 
 
 def compare_payloads(first, second):
