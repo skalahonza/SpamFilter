@@ -1,5 +1,7 @@
 import os
 
+from my_email import Email
+
 
 class Corpus:
     def __init__(self, folder):
@@ -26,4 +28,5 @@ if __name__ == "__main__":
         print(body)
         print('-------------------------')
         count += 1
+        email = Email(fname, body)
     print('Finished: ', count, 'files processed.')
