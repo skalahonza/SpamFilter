@@ -92,9 +92,11 @@ class Email:
 
         match += SECONDARY_PRIORITY * MatchedHeaders / max(len(first.AllHeaders), len(second.AllHeaders))
         # compare payloads
-        payloads_count = max(len(first.payloads), len(second.payloads))
-        # compare each payloadS
-        # match += PAYLOAD_PRIORITY * compare_payloads(first.payloads, second.payloads)
+        payloads_max_count = max(len(first.payloads_dicts), len(second.payloads_dicts))
+        if payloads_max_count > 0:
+            for dict1 in first.payloads_dicts:
+                for dict2 in second.payloads_dicts:
+                    match += compare_payloads(dict1, dict2) * PAYLOAD_PRIORITY / payloads_max_count
         return match
 
 

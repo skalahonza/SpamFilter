@@ -16,7 +16,7 @@ def write_classification_to_file(file, dictionary):
 
 def compute_word_frequencies_from_text(text):
     """
-
+    Creates the dictionary of words with the number of occurrences for each
     :type text: str
     """
     text = text.translate(str.maketrans('.', ' '))
