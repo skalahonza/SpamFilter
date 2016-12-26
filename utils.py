@@ -15,6 +15,10 @@ def write_classification_to_file(file, dictionary):
 
 
 def compute_word_frequencies_from_text(text):
+    """
+
+    :type text: str
+    """
     text = text.translate(str.maketrans('.', ' '))
     text = text.translate(str.maketrans(',', ' '))
     text = text.lower()
