@@ -7,12 +7,14 @@ from utils import compare_payloads
 from utils import not_empty
 
 # Coefficients for comparing
-SUBJECT_PRIORITY = 0.1
-FROM_PRIORITY = 0.1
-RECEIVED_PRIORITY = 0.1
-WARNING_PRIORITY = 0.1
-SECONDARY_PRIORITY = 0.1
-PAYLOAD_PRIORITY = 0.1
+TOTAL_PRIORITIES = 11
+SUBJECT_PRIORITY = 3 / TOTAL_PRIORITIES
+FROM_PRIORITY = 3 / TOTAL_PRIORITIES
+RECEIVED_PRIORITY = 1 / TOTAL_PRIORITIES
+WARNING_PRIORITY = 1 / TOTAL_PRIORITIES
+SECONDARY_PRIORITY = 1 / TOTAL_PRIORITIES
+PAYLOAD_PRIORITY = 2 / TOTAL_PRIORITIES
+
 
 
 class MessageBody:
@@ -96,7 +98,7 @@ class Email:
         if payloads_max_count > 0:
             for dict1 in first.payloads_dicts:
                 for dict2 in second.payloads_dicts:
-                    match += compare_payloads(dict1, dict2) * PAYLOAD_PRIORITY / payloads_max_count
+                    match += compare_dicts(dict1, dict2) * PAYLOAD_PRIORITY / payloads_max_count
         return match
 
 
