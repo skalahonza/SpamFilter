@@ -16,20 +16,6 @@ SECONDARY_PRIORITY = 1 / TOTAL_PRIORITIES
 PAYLOAD_PRIORITY = 2 / TOTAL_PRIORITIES
 
 
-
-class MessageBody:
-    def __init__(self, content, content_type):
-        self.content = content
-        # key - word, word, number of occurrences
-        # is html ?
-        # compare html signatures - clickbaits etc
-        # clear html entities nd extract pure text
-        # examine words formations and occurrences
-        self.sentences = []
-        self.urls = []
-        self.words = compute_word_frequencies_from_text(content)
-
-
 class Email:
     def __init__(self, file_id, string):
         self.file_id = file_id
@@ -38,7 +24,8 @@ class Email:
         self.AllHeaders = msg._headers
         # properties that are not defined will be None
         self.subject = msg['Subject']
-        self.subject_dict = compute_word_frequencies_from_text(self.subject)
+        if self.subject is not None:
+            self.subject_dict = compute_word_frequencies_from_text(self.subject)
         self.From = msg['From']
         # can contain valuable information - for example - suspicious domain differences
         self.x_authentication_warning = msg['X-Authentication-Warning']
@@ -51,8 +38,8 @@ class Email:
         self.payloads_dicts = []
         self.payloads = list(serialize_payload(msg.get_payload()))
         for payload in self.payloads:
-            self.payloads_dicts = compute_word_frequencies_from_text(payload)
-        pass
+            if payload is not None:
+                self.payloads_dicts = compute_word_frequencies_from_text(payload)
 
     @staticmethod
     def compare_emails(first, second):
